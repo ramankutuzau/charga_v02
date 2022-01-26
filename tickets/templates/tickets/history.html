@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
+      <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap4.min.css">
+       <link rel="stylesheet" href="{% static 'css/history_style.css' %}" />
+
+      <title>История талонов</title>
+
+</head>
+<body>
+
+
+      <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">История обслуженных талонов</h3>
+
+                <form class="form" method="POST"style="float:left;">
+                {% csrf_token %}
+                    <p>Выберите дату: <input type="date"name="calendar" id="datePicker">
+                    <select name="select"style="font-size: 18px;margin-top:2px">
+                      <option value="all" selected>Все услуги</option>
+                        {% for el in servicesList %}
+                      <option value={{ el.0 }} >{{ el.1 }} ({{ el.2 }})</option>
+                        {% endfor %}
+                    </select>
+                    <input type="submit" class="dt-button" value="показать"></p>
+
+                    <a href="{% url 'tickets:home' %}">Просмотреть очередь</a>
+
+                </form>
+
+              </div>
+          <div class="card-body">
+                <div class="row">
+                    <div class="col-md-5 card-body">
+                        <div class="card-header">
+                            <h6 style="text-align:center"> Количество посетителей на {{ date }} по каждой услуги</h6>
+                        </div>
+                          <canvas id="ChartDay"></canvas>
+                    </div>
+                    <div class="col-md-4 card-body">
+                        <div class="card-header">
+                            <h6 style="text-align:center"> Количество посетителей на {{ date }} по времени </h6>
+
+                        </div>
+                        <canvas id="ChartClients"style="height:200px"></canvas>
+                        </div>
+                        <div class="col-md-3 card-body">
+                         <div class="card-header">
+                            <h6 style="text-align:center"> Среднее время обслуживания </h6>
+                        </div>
+                             <canvas id="ChartTimesDay"></canvas>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <table id="example1" class="table table-bordered table-striped">
+                  <thead>
+                  <tr>
+                    <th>Префикс</th>
+                    <th>Номер талона</th>
+                    <th>Номер кабинки</th>
+                    <th>Услуга</th>
+                    <th>Время взятие талона</th>
+                    <th>Продолжительность ожидания</th>
+                    <th>Время завершения обслуживания</th>
+                    <th>Продолжительность обслуживания</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                   {% for el in ticketsHistory %}
+                  <tr>
+                    <td>{{ el.0 }}</td>
+                    <td>{{ el.1 }}</td>
+                    <td>{{ el.2 }}</td>
+                    <td>{{ el.3 }}</td>
+                    <td>{{ el.4 }}</td>
+                    <td>{{ el.5 }}</td>
+                    <td>{{ el.6 }}</td>
+                    <td>{{ el.7 }}</td>
+                  </tr>
+                      {% endfor %}
+                  </tfoot>
+                </table>
+              </div>
+              <!-- /.card-body -->
+
+
+
+          <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+          <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+          <script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap4.min.js"></script>
+          <script src="https://cdn.datatables.net/buttons/2.1.0/js/dataTables.buttons.min.js"></script>
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+          <script src="https://cdn.datatables.net/buttons/2.1.0/js/buttons.html5.min.js"></script>
+          <script src="https://cdn.datatables.net/buttons/2.1.0/js/buttons.print.min.js"></script>
+          <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+    <script>
+      const labels = {{ serviceStatistic|safe }};
+
+      const data = {
+        labels: labels,
+        datasets: [{
+          label: 'Обслуженных талонов',
+          backgroundColor: 'rgba(75, 192, 192, 0.2)',
+          borderColor: 'rgba(75, 192, 192)',
+          borderWidth: 1,
+          data: {{ clientsList }},
+        }]
+      };
+
+      const config = {
+        type: 'bar',
+        data: data,
+        options: {}
+      };
+
+      const myChart = new Chart(
+        document.getElementById('ChartDay'),
+        config
+      );
+    </script>
+    <script>
+          // charts2 pie
+
+          const data1 = {
+          labels: {{ serviceStatistic|safe }},
+          datasets: [{
+            label: 'Время обслуживания',
+            data: {{ clientsTimesList }},
+             backgroundColor: [
+              'rgba(255, 99, 132)',
+              'rgba(255, 159, 64)',
+              'rgba(255, 205, 86)',
+              'rgba(75, 192, 192)',
+              'rgba(54, 162, 235)',
+              'rgba(153, 102, 255)',
+              'rgba(201, 203, 207)',
+              'rgba(250, 128, 114)',
+              'rgba(255, 255, 0)',
+            ],
+            hoverOffset: 4
+          }]
+        };
+        const config1 = {
+          type: 'pie',
+          data: data1,
+        };
+
+        const myChart1 = new Chart(
+        document.getElementById('ChartTimesDay'),
+        config1
+      );
+    </script>
+ <script>
+    const labels2 = {{ timesList|safe }};
+
+      const data2 = {
+        labels: labels2,
+        datasets: [{
+          label: 'Обслуженных талонов',
+          backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+        ],
+          borderColor: 'rgba(75, 192, 192)',
+          borderColor: [
+          'rgb(255, 99, 132)'
+        ],
+          borderWidth: 1,
+          data: {{ clientsDuring|safe }},
+        }]
+      };
+
+
+        const config2 = {
+          type: 'bar',
+          data: data2,
+          options: {
+            scales: {
+              y: {
+                beginAtZero: true
+              }
+            }
+          },
+        };
+
+      const myChart2 = new Chart(
+        document.getElementById('ChartClients'),
+        config2
+      );
+ </script>
+        <script>
+            $(document).ready(function() {
+                $('#example1').DataTable( {
+                    dom: 'Bfrtip',
+                    buttons: [
+                        'excel', 'pdf', 'print'
+                    ],
+                     language: {
+                            url: 'https://cdn.datatables.net/plug-ins/1.11.3/i18n/ru.json'
+                     }
+                });
+            });
+
+            document.getElementById('datePicker').valueAsDate = new Date();
+
+        </script>
+
+
+   </body>
+</html>

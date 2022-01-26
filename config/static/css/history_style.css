@@ -1,0 +1,23 @@
+
+.dt-button {
+  width: 180px;
+  height: 30px;
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid #91C9FF;
+  outline: none;
+  transition: 1s ease-in-out;
+}
+
+
+.dt-button:hover {
+  transition: 0.2s ease-in-out;
+  background: #4F95DA;
+}
+
+
+.dt-button span {
+  color: black;
+  font-size: 18px;
+  font-weight: 100;
+}

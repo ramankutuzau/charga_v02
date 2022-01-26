@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Statistics</title>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
+
+</head>
+<body>
+<div class="row">
+    <div class="col-md-7">
+        <div class="card-header">
+            <h6 style="text-align:center"> Количество посетителей на (вставить дату) по каждой услуги</h6>
+        </div>
+      <canvas id="Chart"></canvas>
+    </div>
+    <div class="col-md-5">
+        <div class="card-header">
+            <h6 style="text-align:center"> Среднее время ожидания</h6>
+        </div>
+        <canvas id="Chart1" ></canvas>
+    </div>
+</div>
+<script>
+  const labels = [
+    'Прием регистратора',
+    'Прием юр лиц',
+    'Страхование',
+    'Справки',
+    'Выдача готовых документов',
+    'Техническая инветаризация',
+  ];
+
+  const data = {
+    labels: labels,
+    datasets: [{
+      label: 'Обслуженных талонов',
+      backgroundColor: 'rgba(75, 192, 192, 0.2)',
+      borderColor: 'rgba(75, 192, 192)',
+      borderWidth: 1,
+      data: [40, 30,65, 12, 70, 83, 45],
+    }]
+  };
+
+  const config = {
+    type: 'bar',
+    data: data,
+    options: {}
+  };
+
+  const myChart = new Chart(
+    document.getElementById('Chart'),
+    config
+  );
+</script>
+<script>
+      // charts2 pie
+      const data1 = {
+      labels: [
+        'Прием регистратора',
+        'Прием юр лиц',
+        'Страхование',
+        'Справки',
+        'Выдача готовых документов',
+        'тех инвентаризация'
+      ],
+      datasets: [{
+        label: 'My First Dataset',
+        data: [40, 30, 65, 12, 70, 83, 45],
+         backgroundColor: [
+          'rgba(255, 99, 132)',
+          'rgba(255, 159, 64)',
+          'rgba(255, 205, 86)',
+          'rgba(75, 192, 192)',
+          'rgba(54, 162, 235)',
+          'rgba(153, 102, 255)',
+          'rgba(201, 203, 207)'
+        ],
+        hoverOffset: 4
+      }]
+    };
+    const config1 = {
+      type: 'pie',
+      data: data1,
+    };
+
+    const myChart1 = new Chart(
+    document.getElementById('Chart1'),
+    config1
+  );
+</script>
+
+</body>
+</html>

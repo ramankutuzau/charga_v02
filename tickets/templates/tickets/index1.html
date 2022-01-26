@@ -1,0 +1,239 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="refresh" content="15" />
+
+        <!-- Theme style -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
+        <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+        <title>Очередь</title>
+
+    </head>
+    <body>
+        <!-- Main content -->
+
+        <section class="content">
+            <div class="card-body">
+                <section class="container-fluid">
+                    <div class="col-12">
+                        <div class="row">
+                            <div class="col-sm-8">
+                                <div class="row">
+                                    <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-4 col-sm-6 col-12 box">
+                                        <!-- small box -->
+                                        <div class="small-box" style="background-color: #28a745;">
+                                            <div class="inner">
+                                                <h3>{{ queueCounts.receptionDesk }}</h3>
+                                                <p>1. Прием регистратора</p>
+                                            </div>
+                                            <a href="{% url 'tickets:receptionDesk' %}" class="small-box-footer">Еще информация</a>
+                                        </div>
+                                    </div>
+                                    <!-- ./col -->
+                                    <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-4 col-sm-6 col-12 box">
+                                        <!-- small box -->
+                                        <div class="small-box" style="background-color: #28a745;">
+                                            <div class="inner">
+                                                <h3>{{ queueCounts.legal }}</h3>
+                                                <p>2. Прием юридических лиц</p>
+                                            </div>
+                                            <a href="{% url 'tickets:legalqueue' %}" class="small-box-footer">Еще информация</a>
+                                        </div>
+                                    </div>
+                                    <!-- ./col -->
+                                    <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-4 col-sm-6 col-12 box">
+                                        <!-- small box -->
+                                        <div class="small-box" style="background-color: #28a745;">
+                                            <div class="inner">
+                                                <h3>{{ queueCounts.insurance }}</h3>
+                                                <p>3. Страхование</p>
+                                            </div>
+                                            <a href="{% url 'tickets:insurance' %}" class="small-box-footer">Еще информация</a>
+                                        </div>
+                                    </div>
+                                    <!-- ./col -->
+                                    <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-4 col-sm-6 col-12 box">
+                                        <!-- small box -->
+                                        <div class="small-box" style="background-color: #28a745;">
+                                            <div class="inner">
+                                                <h3>{{ queueCounts.techDoc }}</h3>
+                                                <p>4. Изготовление тех. документации и Оценка</p>
+                                            </div>
+                                            <a href="{% url 'tickets:techdocqueue' %}" class="small-box-footer">Еще информация</a>
+                                        </div>
+                                    </div>
+                                    <!-- ./col -->
+                                    <!-- ./col -->
+                                    <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-4 col-sm-6 col-12 box">
+                                        <!-- small box -->
+                                        <div class="small-box" style="background-color: #28a745;">
+                                            <div class="inner">
+                                                <h3>{{ queueCounts.references }}</h3>
+                                                <p>5. Справки</p>
+                                            </div>
+                                            <a href="{% url 'tickets:referencesqueue' %}" class="small-box-footer">Еще информация</a>
+                                        </div>
+                                    </div>
+                                    <!-- ./col -->
+                                    <!-- ./col -->
+                                    <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-4 col-sm-6 col-12 box">
+                                        <!-- small box -->
+                                        <div class="small-box" style="background-color: #28a745;">
+                                            <div class="inner">
+                                                <h3>{{ queueCounts.readyDoc }}</h3>
+                                                <p>6. Выдача готовых документов и справок</p>
+                                            </div>
+                                            <a href="{% url 'tickets:readydocqueue' %}" class="small-box-footer">Еще информация</a>
+                                        </div>
+                                    </div>
+                                    <!-- ./col -->
+
+                                    <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-4 col-sm-6 col-12 box">
+                                        <!-- small box -->
+                                        <div class="small-box" style="background-color: #28a745;">
+                                            <div class="inner">
+                                                <h3>{{ queueCounts.techInvetory }}</h3>
+                                                <p>Техническая инвентаризация</p>
+                                            </div>
+                                            <a href="{% url 'tickets:techinventory' %}" class="small-box-footer">Еще информация</a>
+                                        </div>
+                                    </div>
+                                    <!-- ./col -->
+                                    <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-4 col-sm-6 col-12 box">
+                                        <!-- small box -->
+                                        <div class="small-box" style="background-color: #28a745;">
+                                            <div class="inner">
+                                                <h3>{{ queueCounts.stateRegistr }}</h3>
+                                                <p>Государственная регистрация</p>
+                                            </div>
+                                            <a href="{% url 'tickets:stateregistr' %}" class="small-box-footer">Еще информация</a>
+                                        </div>
+                                    </div>
+                                    <!-- ./col -->
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="box">
+                                    <!-- small box -->
+                                    <div class="small-box small-box2">
+                                        <div class="inner">
+                                            <p>Ожидают в очереди</p>
+                                            <h3>{{ queueCounts.all }}</h3>
+                                        </div>
+                                        <a href="{% url 'tickets:allqueue' %}" class="small-box-footer">Еще информация</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="fl-table" style="max-height: 400px;">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th class="column1">Номер талона</th>
+                                                <th class="column2">Время взятие талона</th>
+                                                <th class="column3">Услуга</th>
+                                                <th class="column4">Статус</th>
+                                                <th class="column5">Время ожидания</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for el in ticketsInQueue %}
+                                            <tr>
+                                                <td class="column1">{{ el.ticket_num }}</td>
+                                                <td class="column2">{{ el.stand_time }}</td>
+
+                                                <td class="column3">{{ el.service_name }}</td>
+                                                {% if el.status in 'STATE_WAITE' %}
+                                                <td class="column4">В очереди</td>
+                                                {% else %}
+                                                <td class="column4">Приглашен</td>
+                                                {% endif %}
+                                                {% if el.waite_stand_time >= 40  %}
+                                                <td class="column5"><small class="badge badge-danger">{{ el.waite_stand_time }} мин</small></td>
+                                                {% elif el.waite_stand_time >= 20  %}
+                                                <td class="column5"><small class="badge badge-warning">{{ el.waite_stand_time }} мин</small></td>
+                                                 {% elif el.waite_stand_time >= 00  %}
+                                                <td class="column5"><small class="badge badge-success">{{ el.waite_stand_time }} мин</small></td>
+                                                {% endif %}
+                                            </tr>
+                                            {% endfor %}
+                                            <!--  <td class="column5"><small class="badge badge-danger">20:02</small></td> -->
+                                        </tbody>
+
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="card">
+                            <div class="card-header p-2">
+                                <h3>Талоны на обслуживание</h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th class="column1"> № </th>
+                                        <th class="Column1">Номер талона</th>
+                                        <th class="Column2">Номер кабинки</th>
+                                        <th scope="Column3">Услуга</th>
+                                        <th scope="Column4">Время начала обслуживания</th>
+                                        <th scope="Column5">Время ожидания в очереди</th>
+                                        <th scope="Column6">Время обслуживания</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    {% for el in ticketsInWork %}
+                                    <tr>
+                                        <th>{{ el.ticket_num }}</th>
+                                        <td>{{ el.user_name }}</td>
+                                        <td>{{ el.service_name }}</td>
+                                        <td>{{ el.start_time }}</td>
+                                            {% if el.waite_stand_time >= 40  %}
+                                            <td class="column5"><small class="badge badge-danger">{{ el.waite_stand_time }} мин</small></td>
+                                            {% elif el.waite_stand_time >= 20  %}
+                                            <td class="column5"><small class="badge badge-warning">{{ el.waite_stand_time }} мин</small></td>
+                                             {% elif el.waite_stand_time >= 0  %}
+                                            <td class="column5"><small class="badge badge-success">{{ el.waite_stand_time }} мин</small></td>
+                                             {% else %}
+                                            <td class="column5"><small class="badge badge-success">0 мин</small></td>
+                                            {% endif %}
+
+                                            {% if el.waite_start_time >= 40  %}
+                                            <td class="column5"><small class="badge badge-danger">{{ el.waite_start_time }} мин</small></td>
+                                            {% elif el.waite_start_time >= 20  %}
+                                            <td class="column5"><small class="badge badge-warning">{{ el.waite_start_time }} мин</small></td>
+                                            {% elif el.waite_start_time >= 0 %}
+                                            <td class="column5"><small class="badge badge-success">{{ el.waite_start_time }} мин</small></td>
+                                            {% else %}
+                                            <td class="column5"><small class="badge badge-success">0 мин</small></td>
+                                            {% endif %}
+
+                                    </tr>
+                                    {% endfor %}
+
+                                </tbody>
+
+                            </table>
+                             <a href="{% url 'tickets:history' %}"style="font-size:20px;margin: 10px">Просмотреть историю</a>
+                        </div>
+                    </div>
+
+                </section>
+            </div>
+        </section>
+    </body>
+</html>
