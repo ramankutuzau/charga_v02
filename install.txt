@@ -15,7 +15,7 @@ mv django-clean-template <new-dir-name>
 ALLOWED_HOSTS = []
 6. Заливаем свой проект по sftp не перезатирая файл wsgi и не меняя название папки config
 7. . /env/bin/activate
-8. pip install -r requeirments.txt
+8. pip install -r req..
 9. python3 manage.py collectstatic
 10. python3 manage.py migrate
 
@@ -28,13 +28,16 @@ apt-get update
 Далее установите пакеты из главного репозитория:
 
 apt-get install -y samba samba-client
+
 Создайте резервную копию файла конфигурации Samba:
 
-cp /etc/samba/smb.conf /etc/samba/smb.conf.bak
+sudo cp /etc/samba/smb.conf /etc/samba/smb.conf.bak
 
 Откройте файл конфигурации на редактирование с помощью текстового редактора, например nano:
 
-nano /etc/samba/smb.conf
+sudo rm -r /etc/samba/smb.conf
+sudo nano /etc/samba/smb.conf
+
 
 Замените содержимое файла на следующие строки:
 
@@ -60,7 +63,7 @@ browsable = yes
 writable = yes
 
 пользователь для подключения charga пароль: charga1!
-ip машины 192.168.85.24
+ip машины 192.168.85.24 ( 235 )
 
 Чтобы подключиться к общему каталогу, необходимо установить клиент для подключения:
 
@@ -73,4 +76,7 @@ smbclient -U <Пользователь> \\\\<IP-адрес>\\<Общий каталог>
 sudo apt-get install cifs-utils
 Для монтирования используйте следующий формат команды:
 
-mount -t cifs -o username=<Пользователь>,password= //<IP-адрес>/<Общий каталог> <Точка монтирования>
+/home/charga/charga_site/temp - точка монтирования
+
+sudo mount -t cifs -o username=<Пользователь>,password= //<IP-адрес>/<Общий каталог> <Точка монтирования>
+sudo mount -t cifs -o username=charga,password=charga1! //192.168.85.24/temp /home/charga/charga_site/temp
