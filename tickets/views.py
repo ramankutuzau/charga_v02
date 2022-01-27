@@ -25,22 +25,19 @@ def Index(request):
 
 def History(request):
     servicesList = getListServices()
-    timesList = getTimesList()
-    if request.method == "POST":
-        date = request.POST.get('calendar')
-        serviceID = request.POST.get('select')
+
+    if request.method == "GET":
+        date = request.GET.get('calendar')
+        serviceID = request.GET.get('select')
+        if date == None:
+            date = datetime.now().date()
+            serviceID = 'all'
         ticketsHistory = getHistoryTickets(serviceID,date)
         clientsList = getListClients(date, servicesList)
         clientsTimesList = getAverageTimes(date, servicesList)
         clientsDuring = getClientsDuring(date)
-    else:
-        date = datetime.now().date()
-        clientsDuring = getClientsDuring(date)
-        clientsList = getListClients(date, servicesList)
-        ticketsHistory = getHistoryTickets("all",date)
-        clientsTimesList = getAverageTimes(date, servicesList)
+        timesList = getTimesList()
 
-    print(clientsDuring)
     serviceStatistic = getServicesList(servicesList)
     context = {
         'ticketsHistory': ticketsHistory,

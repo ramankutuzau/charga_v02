@@ -272,8 +272,10 @@ def getAverageTimes(date,listServices):
 
 
 def getClientsDuring(date):
+
     i = 0
     listDateTime = []
+
     dateTemp = datetime.strptime(str(date)+' 08:00:00', '%Y-%m-%d %H:%M:%S')
     while i < 13:
         listDateTime.append(dateTemp)
