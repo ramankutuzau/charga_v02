@@ -317,6 +317,188 @@ def getTimesList():
                "16:00 - 17:00","17:00 - 18:00","18:00 - 19:00","19:00 - 20:00"]
     return newList
 
+
+def getPeriodWaiteTimes(dateFrom,dateTo,listServices):
+    try:
+        with connect(
+                host=os.getenv('DB_HOST'),
+                user=os.getenv('DB_USER'),
+                password=os.getenv('DB_PASSWORD'),
+        ) as connection:
+            with connection.cursor() as cursor:
+                new_rows = []
+                for el in listServices:
+                    query = f" SELECT client_wait_period FROM {os.getenv('DB_NAME')}.statistic" \
+                            f" JOIN {os.getenv('DB_NAME')}.services ON statistic.service_id = services.id " \
+                            f" WHERE service_id = {el[0]} AND " \
+                            f" client_stand_time >= '{dateFrom} 08:00:00' AND  client_stand_time <= '{dateTo} 23:59:00' "
+                    cursor.execute(query)
+                    rows = cursor.fetchall()
+                    if len(rows) > 0:
+                        sum = 0
+                        for el in rows:
+                            sum += el[0]
+                        average = sum / len(rows)
+                        new_rows.append(int(average))
+                    else:
+                        new_rows.append(0)
+        return new_rows
+    except Error as e:
+        print(e)
+
+
+def getPeriodWorkTimes(dateFrom,dateTo,listServices):
+    try:
+        with connect(
+                host=os.getenv('DB_HOST'),
+                user=os.getenv('DB_USER'),
+                password=os.getenv('DB_PASSWORD'),
+        ) as connection:
+            with connection.cursor() as cursor:
+                new_rows = []
+                for el in listServices:
+                    query = f" SELECT user_work_period FROM {os.getenv('DB_NAME')}.statistic" \
+                            f" JOIN {os.getenv('DB_NAME')}.services ON statistic.service_id = services.id " \
+                            f" WHERE service_id = {el[0]} AND " \
+                            f" client_stand_time >= '{dateFrom} 08:00:00' AND  client_stand_time <= '{dateTo} 23:59:00' "
+                    cursor.execute(query)
+                    rows = cursor.fetchall()
+                    if len(rows) > 0:
+                        sum = 0
+                        for el in rows:
+                            sum += el[0]
+                        average = sum / len(rows)
+                        new_rows.append(int(average))
+                    else:
+                        new_rows.append(0)
+        return new_rows
+    except Error as e:
+        print(e)
+
+
+def getPeriodListClients(dateFrom,dateTo,listServices):
+
+    try:
+        with connect(
+                host=os.getenv('DB_HOST'),
+                user=os.getenv('DB_USER'),
+                password=os.getenv('DB_PASSWORD'),
+        ) as connection:
+            with connection.cursor() as cursor:
+                new_rows = []
+                for el in listServices:
+                    query = f" SELECT COUNT(*) FROM {os.getenv('DB_NAME')}.statistic" \
+                            f" JOIN {os.getenv('DB_NAME')}.services ON statistic.service_id = services.id " \
+                            f" WHERE service_id = {el[0]} AND" \
+                            f" client_stand_time >= '{dateFrom} 08:00:00' AND  client_stand_time <= '{dateTo} 23:59:00' "
+
+                    cursor.execute(query)
+                    rows = cursor.fetchall()
+                    for el in rows:
+                        new_rows.append(el[0])
+        return new_rows
+    except Error as e:
+        print(e)
+
+
+def getPeriodClients(dateFrom,dateTo):
+
+    dateTemp = datetime.strptime(str(dateFrom) + ' 08:00:00', '%Y-%m-%d %H:%M:%S')
+    dateTo = datetime.strptime(str(dateTo) + ' 20:00:00', '%Y-%m-%d %H:%M:%S')
+
+    out_rows = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    days = 0
+    while dateTemp <= dateTo:
+        listDateTime = []
+        i = 0
+        while i < 13:
+            listDateTime.append(dateTemp)
+            dateTemp = dateTemp + timedelta(hours=1)
+            i += 1
+
+        try:
+            with connect(
+                    host=os.getenv('DB_HOST'),
+                    user=os.getenv('DB_USER'),
+                    password=os.getenv('DB_PASSWORD'),
+            ) as connection:
+                with connection.cursor() as cursor:
+                    new_rows = []
+                    i = 0
+                    j = 0
+                    while i < len(listDateTime) - 1:
+                        query = f" SELECT COUNT(*) FROM {os.getenv('DB_NAME')}.clients WHERE " \
+                                f" stand_time >= '{listDateTime[i]}' AND  stand_time <= '{listDateTime[i+1]}' "
+                        cursor.execute(query)
+                        rows = cursor.fetchall()
+                        for el in rows:
+                            new_rows.append(el[0])
+                        i += 1
+        except Error as e:
+            print(e)
+        days += 1
+        while j < len(new_rows):
+            if not new_rows[0] == 0: # если не выходной
+                out_rows[j] += new_rows[j]
+            j += 1
+        dateTemp = dateTemp + timedelta(hours=11)
+
+    j = 0
+    while j < len(out_rows):
+        out_rows[j] = round(out_rows[j] / days)
+        j += 1
+    return out_rows
+
+
+def getPeriodServices(dateFrom,dateTo,serviceID):
+
+    dateTemp = datetime.strptime(str(dateFrom)+' 08:00:00', '%Y-%m-%d %H:%M:%S')
+    dateTo = datetime.strptime(str(dateTo)+' 20:00:00', '%Y-%m-%d %H:%M:%S')
+    out_rows = []
+    while dateTemp <= dateTo:
+        try:
+            with connect(
+                    host=os.getenv('DB_HOST'),
+                    user=os.getenv('DB_USER'),
+                    password=os.getenv('DB_PASSWORD'),
+            ) as connection:
+                with connection.cursor() as cursor:
+                    strQuery = ''
+                    if serviceID != 'all':
+                        strQuery = f" AND statistic.service_id = {serviceID}"
+                    dateTemp1 = dateTemp + timedelta(hours=12)
+                    query = f" SELECT COUNT(*) FROM {os.getenv('DB_NAME')}.statistic" \
+                            f" JOIN {os.getenv('DB_NAME')}.services ON statistic.service_id = services.id " \
+                            f" WHERE client_stand_time >= '{dateTemp}'" \
+                            f" AND  client_stand_time <= '{dateTemp1}' {strQuery} "
+
+
+                    cursor.execute(query)
+                    rows = cursor.fetchall()
+                    for el in rows:
+                        out_rows.append(el[0])
+
+        except Error as e:
+            print(e)
+
+        dateTemp = dateTemp + timedelta(days=1)
+
+    return out_rows
+
+
+def getDateList(dateFrom,dateTo):
+    new_rows = []
+
+    dateFrom = datetime.strptime(str(dateFrom), '%Y-%m-%d')
+    dateTo = datetime.strptime(str(dateTo), '%Y-%m-%d')
+    while dateFrom <= dateTo:
+
+        new_rows.append(str(dateFrom).split(' ')[0])
+
+        dateFrom = dateFrom + timedelta(days=1)
+
+    return new_rows
+
 warnings.filterwarnings(
         'ignore', r"DateTimeField .* received a naive datetime",
         RuntimeWarning, r'django\.db\.models\.fields')

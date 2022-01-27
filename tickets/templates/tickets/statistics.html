@@ -9,29 +9,71 @@
 
 </head>
 <body>
-<div class="row">
-    <div class="col-md-7">
-        <div class="card-header">
-            <h6 style="text-align:center"> Количество посетителей на (вставить дату) по каждой услуги</h6>
+    <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Статистика обслуженных талонов</h3>
+                <form class="form" method="GET"  style="float:left;">
+                    <p>Выберите дату: С <input type="date" name="calendarFrom" id="datePicker" value={{ dateFrom }}>
+                    по <input type="date"name="calendarTo" value={{ dateTo }} id="datePicker1">
+                    <input type="submit" class="dt-button" value="показать"></p>
+                </form>
+              </div>
+             <div class="row card-body">
+                <div class="col-md-6">
+                    <div class="card-header">
+                        <h6 style="text-align:center"> Количество посетителей по каждой услуги</h6>
+                    </div>
+                  <canvas id="ChartAllService"></canvas>
+                </div>
+                <div class="col-md-3">
+                    <div class="card-header">
+                        <h6 style="text-align:center"> Среднее время ожидания</h6>
+                    </div>
+                    <canvas id="ChartAverageWorkTime" ></canvas>
+                </div>
+                <div class="col-md-3">
+                    <div class="card-header">
+                        <h6 style="text-align:center"> Среднее время обслуживания</h6>
+                    </div>
+                    <canvas id="ChartAverageWaiteTime" ></canvas>
+                </div>
+
+             </div>
+
+        <div class="card">
+             <div class="row card-body">
+                  <div class="col-md-8">
+                    <div class="card-header">
+                        <h6 style="text-align:center"> Среднее количество взятых талонов</h6>
+                    </div>
+                  <canvas id="ChartAveragePeriodTimes"></canvas>
+                </div>
+                  <div class="col-md-7">
+                    <div class="card-header"style="height:80px">
+                    <h6 style="text-align:center"> Количество посетителей по каждой услуги</h6>
+                     <form class="form" method="GET"  style="float:left;">
+                        <p>Выберите дату: С <input type="date" name="calendarFrom" id="datePicker2" value={{ dateFrom }}>
+                    по <input type="date"name="calendarTo" value={{ dateTo }} id="datePicker3">
+                        <select name="select"style="font-size: 18px;margin-top:2px">
+                          <option value="all" selected>Все услуги</option>
+                            {% for el in servicesList %}
+                          <option value={{ el.0 }} >{{ el.1 }} ({{ el.2 }})</option>
+                            {% endfor %}
+                        </select>
+                        <input type="submit" class="dt-button" value="показать"></p>
+                     </form>
+                    </div>
+
+                  <canvas id="ChartServices"></canvas>
+                </div>
+             </div>
         </div>
-      <canvas id="Chart"></canvas>
     </div>
-    <div class="col-md-5">
-        <div class="card-header">
-            <h6 style="text-align:center"> Среднее время ожидания</h6>
-        </div>
-        <canvas id="Chart1" ></canvas>
     </div>
-</div>
+
 <script>
-  const labels = [
-    'Прием регистратора',
-    'Прием юр лиц',
-    'Страхование',
-    'Справки',
-    'Выдача готовых документов',
-    'Техническая инветаризация',
-  ];
+    // chart bar 1
+  const labels = {{ serviceStatistic|safe }};
 
   const data = {
     labels: labels,
@@ -40,7 +82,7 @@
       backgroundColor: 'rgba(75, 192, 192, 0.2)',
       borderColor: 'rgba(75, 192, 192)',
       borderWidth: 1,
-      data: [40, 30,65, 12, 70, 83, 45],
+      data: {{ clientsPeriodList }},
     }]
   };
 
@@ -51,24 +93,17 @@
   };
 
   const myChart = new Chart(
-    document.getElementById('Chart'),
+    document.getElementById('ChartAllService'),
     config
   );
 </script>
 <script>
       // charts2 pie
       const data1 = {
-      labels: [
-        'Прием регистратора',
-        'Прием юр лиц',
-        'Страхование',
-        'Справки',
-        'Выдача готовых документов',
-        'тех инвентаризация'
-      ],
+      labels: {{ serviceStatistic|safe }},
       datasets: [{
         label: 'My First Dataset',
-        data: [40, 30, 65, 12, 70, 83, 45],
+        data: {{ periodWaiteTimes }},
          backgroundColor: [
           'rgba(255, 99, 132)',
           'rgba(255, 159, 64)',
@@ -76,8 +111,10 @@
           'rgba(75, 192, 192)',
           'rgba(54, 162, 235)',
           'rgba(153, 102, 255)',
-          'rgba(201, 203, 207)'
-        ],
+          'rgba(201, 203, 207)',
+          'rgba(250, 128, 114)',
+          'rgba(255, 255, 0)',
+    ],
         hoverOffset: 4
       }]
     };
@@ -87,10 +124,101 @@
     };
 
     const myChart1 = new Chart(
-    document.getElementById('Chart1'),
+    document.getElementById('ChartAverageWorkTime'),
     config1
   );
 </script>
 
+
+<script>
+      // charts3 pie
+      const data2 = {
+      labels: {{ serviceStatistic|safe }},
+      datasets: [{
+        label: 'My First Dataset',
+        data: {{ periodWorkTimes }},
+         backgroundColor: [
+          'rgba(255, 99, 132)',
+          'rgba(255, 159, 64)',
+          'rgba(255, 205, 86)',
+          'rgba(75, 192, 192)',
+          'rgba(54, 162, 235)',
+          'rgba(153, 102, 255)',
+          'rgba(201, 203, 207)',
+          'rgba(250, 128, 114)',
+          'rgba(255, 255, 0)',
+        ],
+        hoverOffset: 4
+      }]
+    };
+    const config2 = {
+      type: 'pie',
+      data: data2,
+    };
+
+    const myChart2 = new Chart(
+    document.getElementById('ChartAverageWaiteTime'),
+    config2
+  );
+</script>
+
+<script>
+    // chart4 bar
+
+  const data3 = {
+    labels: {{ timesList|safe }},
+    datasets: [{
+      label: 'Обслуженных талонов',
+      backgroundColor: 'rgba(255, 99, 132, 0.2)',
+      borderColor: 'rgba(255, 99, 132)',
+      borderWidth: 1,
+      data: {{ periodClients }},
+    }]
+  };
+
+  const config3 = {
+    type: 'bar',
+    data: data3,
+    options: {}
+  };
+
+  const myChart3 = new Chart(
+    document.getElementById('ChartAveragePeriodTimes'),
+    config3
+  );
+</script>
+<script>
+    // chart5 line
+  const labels4 = {{ dateList|safe }};
+
+  const data4 = {
+    labels: labels4,
+    datasets: [{
+      label: 'Обслуженных талонов',
+      backgroundColor: 'rgba(255, 99, 132)',
+      borderColor: 'rgba(255, 99, 132)',
+      borderWidth: 1,
+      data: {{ periodServices }},
+    }]
+  };
+
+  const config4 = {
+    type: 'line',
+    data: data4,
+    options: {}
+  };
+
+  const myChart4 = new Chart(
+    document.getElementById('ChartServices'),
+    config4
+  );
+</script>
+
+<script>
+    document.getElementById('datePicker').valueAsDate = new Date();
+    document.getElementById('datePicker1').valueAsDate = new Date();
+    document.getElementById('datePicker2').valueAsDate = new Date();
+    document.getElementById('datePicker3').valueAsDate = new Date();
+</script>
 </body>
 </html>

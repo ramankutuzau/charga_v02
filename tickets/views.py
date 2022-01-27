@@ -2,10 +2,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from datetime import datetime
 from .utils import *
-__all__ = ('Index','History','receptionDeskQueue',
+
+__all__ = ('Index','History','Statistics','receptionDeskQueue',
            'insuranceQueue','allQueue','legalQueue','techDocQueue',
            'referencesQueue','readyDocQueue','stateRegistr',
-           'techInventory','statisticsCharts',)
+           'techInventory',)
 
 
 
@@ -51,6 +52,45 @@ def History(request):
     }
     return render(request, "tickets/history.html",context)
 
+
+def Statistics(request):
+
+    servicesList = getListServices()
+
+    if request.method == "GET":
+        dateFrom = request.GET.get('calendarFrom')
+        dateTo = request.GET.get('calendarTo')
+        serviceID = request.GET.get('select')
+        if dateFrom == None:
+            dateFrom = datetime.now().date()
+            dateTo = datetime.now().date()
+            serviceID = 'all'
+
+
+    clientsPeriodList = getPeriodListClients(dateFrom, dateTo, servicesList)
+    periodWaiteTimes = getPeriodWaiteTimes(dateFrom, dateTo, servicesList)
+    periodWorkTimes = getPeriodWorkTimes(dateFrom, dateTo, servicesList)
+    serviceStatistic = getServicesList(servicesList)
+    periodClients = getPeriodClients(dateFrom, dateTo)
+    periodServices = getPeriodServices(dateFrom,dateTo,serviceID)
+    dateList = getDateList(dateFrom,dateTo)
+    timesList = getTimesList()
+    context = {
+        'serviceStatistic': serviceStatistic,
+
+        'clientsPeriodList': clientsPeriodList,
+        'periodWaiteTimes': periodWaiteTimes,
+        'periodWorkTimes': periodWorkTimes,
+        'periodClients': periodClients,
+        'periodServices': periodServices,
+
+        'servicesList': servicesList,
+        'timesList': timesList,
+        'dateList':dateList,
+        'dateFrom': dateFrom,
+        'dateTo': dateTo,
+    }
+    return render(request, "tickets/statistics.html",context)
 
 def receptionDeskQueue(request):
     parserJson()
@@ -159,14 +199,6 @@ def allQueue(request):
         'ticketsInWork': ticketsInWork,
         'ticketsInQueue': ticketsInQueue,
         'queueCounts': getQueueCounts,
-
     }
     return render(request,"tickets/index1.html",context)
 
-
-def statisticsCharts(request):
-
-
-
-
-    return render(request, "tickets/statistics.html")

@@ -17,7 +17,7 @@
               <div class="card-header">
                 <h3 class="card-title">История обслуженных талонов</h3>
                 <form class="form" method="GET"  style="float:left;">
-                    <p>Выберите дату: <input type="date" value="2017-06-01" name="calendar" id="datePicker">
+                    <p>Выберите дату: <input type="date" name="calendar" value= {{ date }} id="datePicker">
                     <select name="select"style="font-size: 18px;margin-top:2px">
                       <option value="all" selected>Все услуги</option>
                         {% for el in servicesList %}
@@ -26,7 +26,8 @@
                     </select>
                     <input type="submit" class="dt-button" value="показать"></p>
 
-                    <a href="{% url 'tickets:home' %}">Просмотреть очередь</a>
+                      <a class="btn btn-secondary" href="{% url 'tickets:home' %}">Очередь</a>
+                      <a class="btn btn-secondary" href="{% url 'tickets:statistics' %}">Статистика</a>
 
                 </form>
 
