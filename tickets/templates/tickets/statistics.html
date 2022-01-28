@@ -16,6 +16,9 @@
                     <p>Выберите дату: С <input type="date" name="calendarFrom" id="datePicker" value={{ dateFrom }}>
                     по <input type="date"name="calendarTo" value={{ dateTo }} id="datePicker1">
                     <input type="submit" class="dt-button" value="показать"></p>
+
+                      <a class="btn btn-secondary" href="{% url 'tickets:home' %}">Очередь</a>
+                      <a class="btn btn-secondary" href="{% url 'tickets:history' %}">История</a>
                 </form>
               </div>
              <div class="row card-body">
@@ -54,13 +57,13 @@
                      <form class="form" method="GET"  style="float:left;">
                         <p>Выберите дату: С <input type="date" name="calendarFrom" id="datePicker2" value={{ dateFrom }}>
                     по <input type="date"name="calendarTo" value={{ dateTo }} id="datePicker3">
-                        <select name="select"style="font-size: 18px;margin-top:2px">
+                        <select name="select"style="font-size: 18px;margin-top:2px" >
                           <option value="all" selected>Все услуги</option>
                             {% for el in servicesList %}
                           <option value={{ el.0 }} >{{ el.1 }} ({{ el.2 }})</option>
                             {% endfor %}
                         </select>
-                        <input type="submit" class="dt-button" value="показать"></p>
+                        <input type="submit" class="dt-button" href="#select" value="показать" onclick="Submit-btn"></p>
                      </form>
                     </div>
 
@@ -219,6 +222,7 @@
     document.getElementById('datePicker1').valueAsDate = new Date();
     document.getElementById('datePicker2').valueAsDate = new Date();
     document.getElementById('datePicker3').valueAsDate = new Date();
+
 </script>
 </body>
 </html>
