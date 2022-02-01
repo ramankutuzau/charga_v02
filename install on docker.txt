@@ -1,0 +1,145 @@
+38 ubuntu 166 centos
+ќбновите локальную базу пакетов:
+sudo yum check-update
+”становить часовой по€с
+sudo timedatectl set-timezone Europe/Minsk
+INSTASLL ON CENTOS
+Uninstall old versions:
+ sudo yum remove docker \
+                  docker-client \
+                  docker-client-latest \
+                  docker-common \
+                  docker-latest \
+                  docker-latest-logrotate \
+                  docker-logrotate \
+                  docker-engine
+Set up the repository:
+ sudo yum install -y yum-utils
+ sudo yum-config-manager \
+    --add-repo \
+    https://download.docker.com/linux/centos/docker-ce.repo
+
+Install Docker Engine
+ sudo yum install docker-ce docker-ce-cli containerd.io
+
+python3 -m venv env
+. env/bin/activate
+remove django in requirements.txt
+pip install -r requirement
+env/lib64/python3.6/site-packages/django/db/backends/sqlite3/base.py comment check_update_version
+
+INSTALL DOCKE ON UBUNTU:
+ѕервым делом обновите существующий список пакетов:
+
+1) sudo apt update
+«атем установите несколько необходимых пакетов, которые позвол€ют apt использовать пакеты через HTTPS:
+
+2) sudo apt install apt-transport-https ca-certificates curl software-properties-common
+ƒобавьте ключ GPG дл€ официального репозитори€ Docker в вашу систему:
+
+3) curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+ƒобавьте репозиторий Docker в источники APT:
+
+4) sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+ѕотом обновите базу данных пакетов и добавьте в нее пакеты Docker из недавно добавленного репозитори€:
+
+5) sudo apt update
+”бедитесь, что установка будет выполн€тьс€ из репозитори€ Docker, а не из репозитори€ Ubuntu по умолчанию:
+
+6) apt-cache policy docker-ce
+¬ы должны получить следующий вывод, хот€ номер версии Docker может отличатьс€:
+
+Output of apt-cache policy docker-ce
+docker-ce:
+  Installed: (none)
+  Candidate: 5:19.03.9~3-0~ubuntu-focal
+  Version table:
+     5:19.03.9~3-0~ubuntu-focal 500
+        500 https://download.docker.com/linux/ubuntu focal/stable amd64 Packages
+ќбратите внимание, что docker-ce не установлен, но €вл€етс€ кандидатом на установку из репозитори€ Docker дл€ Ubuntu 20.04 (верси€ focal).
+
+”становите Docker:
+
+7) sudo apt install docker-ce
+Docker должен быть установлен, демон-процесс запущен, а дл€ процесса активирован запуск при загрузке. ѕроверьте, что он запущен:
+
+8) sudo systemctl status docker
+
+добавить пользовател€:
+Create the docker group if it does not exist
+1) sudo groupadd docker
+Add your user to the docker group.
+2) sudo usermod -aG docker $USER
+Run the following command or Logout and login again and run (that doesn't work you may need to reboot your machine first)
+3) newgrp docker
+
+Check if docker can be run without root
+4) docker run hello-world
+Reboot if still got error
+5) reboot
+
+Configure Portainer
+We have installed docker and verified by running the simple docker image. Now we will pull the docker portainer/portainer-ce image (formerly portainer/portainer) and run it as a container. Before running the container, create a persistent docker volume to store portainer data.
+
+$ sudo docker volume create portainer_data
+Now create the portainer container using the following command.
+
+1) sudo docker run -d -p 9000:9000 -p 8000:8000 --name portainer --restart always -v /var/run/docker.sock:/var/run/docker.sock -v /srv/portainer:/data portainer/portainer-ce
+9175262!
+https://webdevblog.ru/kak-ispolzovat-django-postgresql-i-docker/
+
+$ mkdir django-on-docker && cd django-on-docker
+$ python3.8 -m venv env
+$ source env/bin/activate
+(env)$ pip install django
+(env)$ django-admin.py startproject hello_django 
+(env)$ python manage.py runserver
+
+
+1) nano Dockerfile
+
+write:
+# pull official base image
+FROM python:3.9
+# set work directory
+WORKDIR /usr/src/app
+# set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+# install dependencies
+RUN pip install --upgrade pip
+COPY ./requirements.txt .
+RUN pip install -r requirements.txt
+# copy project
+COPY . .
+
+2) docker build .
+
+ƒалее нам нужен новый файл docker-compose.yml. ќн говорит Docker, как запустить наши Docker-контейнеры.
+
+(app) $ touch docker-compose.yml
+
+version: '3.7'
+services:
+  web:
+    build: ./app
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./app/:/usr/src/app/
+    ports:
+      - 8000:8000
+    env_file:
+      - ./.env.dev
+
+—обираем образ командой:
+
+1) docker-compose build
+ ак только образ будет собран, запускаем контейнер:
+
+2) docker-compose up -d
+ƒалее нужно перейти по адресу http://localhost:8000/, чтобы снова увидеть экран приветстви€ и убедитьс€ что все работает.
+
+ѕроверьте наличие ошибок в журналах, если это не работает, через команду:
+
+3) docker-compose logs -f
+ƒокер настроен!
