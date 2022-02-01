@@ -97,7 +97,7 @@ $ source env/bin/activate
 
 
 1) nano Dockerfile
-
+ ( должен лежать в проекте джанго )
 write:
 # pull official base image
 FROM python:3.9
