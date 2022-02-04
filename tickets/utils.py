@@ -195,7 +195,7 @@ def getListServices():
                 password=os.getenv('DB_PASSWORD'),
         ) as connection:
 
-            query = f" SELECT services.id, services.name,service_prefix" \
+            query = f" SELECT services.id, services.name" \
                     f" FROM {os.getenv('DB_NAME')}.services ORDER BY services.name"
 
             with connection.cursor() as cursor:
@@ -203,8 +203,8 @@ def getListServices():
                 rows = cursor.fetchall()
                 new_rows = []
                 for el in rows:
-                    if not ('Оператор' in el[1] or 'Операторы' in el[1] ) and (el[1] != ''):
-                        elTemp = [el[0],el[1],el[2]]
+                    if not ('Оператор' in el[1] or 'Операторы' in el[1] or 'Прием юридических лиц' in el[1] ) and (el[1] != ''):
+                        elTemp = [el[0],el[1]]
                         new_rows.append(elTemp)
 
         return new_rows
@@ -213,6 +213,14 @@ def getListServices():
 
 
 
+def getListWithTime(servicesList,dataList):
+    newList = []
+    i = 0
+
+    while i < len(servicesList):
+        newList.append(f"{servicesList[i]} ({dataList[i]})")
+        i += 1
+    return newList
 
 
 def getListClients(date,listServices):
@@ -306,7 +314,7 @@ def getClientsDuring(date):
 def getServicesList(servicesList):
     newList = []
     for el in servicesList:
-        newList.append(f"{el[1]} ({el[2]})")
+        newList.append(f"{el[1]}")
 
     return newList
 

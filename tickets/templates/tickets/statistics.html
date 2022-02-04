@@ -103,7 +103,7 @@
 <script>
       // charts2 pie
       const data1 = {
-      labels: {{ serviceStatistic|safe }},
+      labels: {{ servicesPeriodWaiteTimes|safe }},
       datasets: [{
         label: 'My First Dataset',
         data: {{ periodWaiteTimes }},
@@ -136,7 +136,7 @@
 <script>
       // charts3 pie
       const data2 = {
-      labels: {{ serviceStatistic|safe }},
+      labels: {{ servicesPeriodWorkTimes|safe }},
       datasets: [{
         label: 'My First Dataset',
         data: {{ periodWorkTimes }},

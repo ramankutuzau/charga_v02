@@ -80,9 +80,9 @@
                     <td>{{ el.1 }}</td>
                     <td>{{ el.2 }}</td>
                     <td>{{ el.3 }}</td>
-                    <td>{{ el.4 }}</td>
+                    <td>{{ el.4|date:"d.m.Y H:i"}}</td>
                     <td>{{ el.5 }}</td>
-                    <td>{{ el.6 }}</td>
+                    <td>{{ el.6|date:"d.m.Y H:i" }}</td>
                     <td>{{ el.7 }}</td>
                   </tr>
                       {% endfor %}
@@ -106,7 +106,7 @@
 
 
     <script>
-      const labels = {{ serviceStatistic|safe }};
+      const labels = {{ serviceStatisticWithCount|safe }};
 
       const data = {
         labels: labels,
@@ -134,7 +134,7 @@
           // charts2 pie
 
           const data1 = {
-          labels: {{ serviceStatistic|safe }},
+          labels: {{ clientsTimesListWithTime|safe }},
           datasets: [{
             label: 'Время обслуживания',
             data: {{ clientsTimesList }},

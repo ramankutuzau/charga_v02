@@ -40,15 +40,25 @@ def History(request):
         timesList = getTimesList()
 
     serviceStatistic = getServicesList(servicesList)
+    servicesListWithCount = getListWithTime(serviceStatistic, clientsList)
+    clientsTimesListWithTime = getListWithTime(serviceStatistic, clientsTimesList)
+    # timesListWithTime = getListWithTime(timesList,clientsDuring)
     context = {
         'ticketsHistory': ticketsHistory,
         'servicesList': servicesList,
         'serviceStatistic': serviceStatistic,
+        # graph 1
+        'serviceStatisticWithCount': servicesListWithCount,
         'clientsList': clientsList,
-        'clientsTimesList': clientsTimesList,
-        'date':date,
+        # graph 2
         'clientsDuring':clientsDuring,
         'timesList':timesList,
+        # graph 3
+        'clientsTimesListWithTime': clientsTimesListWithTime,
+        'clientsTimesList': clientsTimesList,
+
+        'date': date,
+
     }
     return render(request, "tickets/history.html",context)
 
@@ -75,12 +85,20 @@ def Statistics(request):
     periodServices = getPeriodServices(dateFrom,dateTo,serviceID)
     dateList = getDateList(dateFrom,dateTo)
     timesList = getTimesList()
+    servicesListWithCount = getListWithTime(serviceStatistic,clientsPeriodList)
+    PeriodWaiteTimesWithTime = getListWithTime(serviceStatistic,periodWaiteTimes)
+    periodWorkTimesWithTime = getListWithTime(serviceStatistic,periodWorkTimes)
     context = {
-        'serviceStatistic': serviceStatistic,
-
+        # 1 graph
+        'serviceStatistic': servicesListWithCount,
         'clientsPeriodList': clientsPeriodList,
+        # 2 graph
+        'servicesPeriodWaiteTimes': PeriodWaiteTimesWithTime,
         'periodWaiteTimes': periodWaiteTimes,
+        # 3 graph
+        'servicesPeriodWorkTimes': periodWorkTimesWithTime,
         'periodWorkTimes': periodWorkTimes,
+        # 4 graph
         'periodClients': periodClients,
         'periodServices': periodServices,
 
