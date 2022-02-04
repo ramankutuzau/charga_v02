@@ -3,76 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <title>Статистика</title>
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap4.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
 
 </head>
 <body>
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Статистика обслуженных талонов</h3>
+        <form class="form" method="GET"  style="float:left;">
+            <p>Выберите дату: С <input type="date" name="calendarFrom" id="datePicker" value={{ dateFrom }}>
+                по <input type="date"name="calendarTo" value={{ dateTo }} id="datePicker1">
+                <input type="submit" class="dt-button" value="показать"></p>
+
+            <a class="btn btn-secondary" href="{% url 'tickets:home' %}">Очередь</a>
+            <a class="btn btn-secondary" href="{% url 'tickets:history' %}">История</a>
+        </form>
+    </div>
+    <div class="row card-body">
+        <div class="col-md-6">
+            <div class="card-header">
+                <h6 style="text-align:center"> Количество посетителей по каждой услуги</h6>
+            </div>
+            <canvas id="ChartAllService"></canvas>
+        </div>
+        <div class="col-md-3">
+            <div class="card-header">
+                <h6 style="text-align:center"> Среднее время ожидания</h6>
+            </div>
+            <canvas id="ChartAverageWorkTime" ></canvas>
+        </div>
+        <div class="col-md-3">
+            <div class="card-header">
+                <h6 style="text-align:center"> Среднее время обслуживания</h6>
+            </div>
+            <canvas id="ChartAverageWaiteTime" ></canvas>
+        </div>
+
+    </div>
+
     <div class="card">
-              <div class="card-header">
-                <h3 class="card-title">Статистика обслуженных талонов</h3>
-                <form class="form" method="GET"  style="float:left;">
-                    <p>Выберите дату: С <input type="date" name="calendarFrom" id="datePicker" value={{ dateFrom }}>
-                    по <input type="date"name="calendarTo" value={{ dateTo }} id="datePicker1">
-                    <input type="submit" class="dt-button" value="показать"></p>
-
-                      <a class="btn btn-secondary" href="{% url 'tickets:home' %}">Очередь</a>
-                      <a class="btn btn-secondary" href="{% url 'tickets:history' %}">История</a>
-                </form>
-              </div>
-             <div class="row card-body">
-                <div class="col-md-6">
-                    <div class="card-header">
-                        <h6 style="text-align:center"> Количество посетителей по каждой услуги</h6>
-                    </div>
-                  <canvas id="ChartAllService"></canvas>
+        <div class="row card-body">
+            <div class="col-md-8">
+                <div class="card-header">
+                    <h6 style="text-align:center"> Среднее количество взятых талонов</h6>
                 </div>
-                <div class="col-md-3">
-                    <div class="card-header">
-                        <h6 style="text-align:center"> Среднее время ожидания</h6>
-                    </div>
-                    <canvas id="ChartAverageWorkTime" ></canvas>
-                </div>
-                <div class="col-md-3">
-                    <div class="card-header">
-                        <h6 style="text-align:center"> Среднее время обслуживания</h6>
-                    </div>
-                    <canvas id="ChartAverageWaiteTime" ></canvas>
-                </div>
-
-             </div>
-
-        <div class="card">
-             <div class="row card-body">
-                  <div class="col-md-8">
-                    <div class="card-header">
-                        <h6 style="text-align:center"> Среднее количество взятых талонов</h6>
-                    </div>
-                  <canvas id="ChartAveragePeriodTimes"></canvas>
-                </div>
-                  <div class="col-md-7">
-                    <div class="card-header"style="height:80px">
+                <canvas id="ChartAveragePeriodTimes"></canvas>
+            </div>
+            <div class="col-md-7">
+                <div class="card-header"style="height:80px">
                     <h6 style="text-align:center"> Количество посетителей по каждой услуги</h6>
-                     <form class="form" method="GET"  style="float:left;">
+                    <form class="form" method="GET"  style="float:left;">
                         <p>Выберите дату: С <input type="date" name="calendarFrom" id="datePicker2" value={{ dateFrom }}>
-                    по <input type="date"name="calendarTo" value={{ dateTo }} id="datePicker3">
-                        <select name="select"style="font-size: 18px;margin-top:2px" >
-                          <option value="all" selected>Все услуги</option>
-                            {% for el in servicesList %}
-                          <option value={{ el.0 }} >{{ el.1 }} ({{ el.2 }})</option>
-                            {% endfor %}
-                        </select>
-                        <input type="submit" class="dt-button" href="#select" value="показать" onclick="Submit-btn"></p>
-                     </form>
-                    </div>
-
-                  <canvas id="ChartServices"></canvas>
+                            по <input type="date"name="calendarTo" value={{ dateTo }} id="datePicker3">
+                            <select name="select"style="font-size: 18px;margin-top:2px" >
+                                <option value="all" selected>Все услуги</option>
+                                {% for el in servicesList %}
+                                <option value={{ el.0 }} >{{ el.1 }} ({{ el.2 }})</option>
+                                {% endfor %}
+                            </select>
+                            <input type="submit" class="dt-button" href="#select" value="показать" onclick="Submit-btn"></p>
+                    </form>
                 </div>
-             </div>
+
+                <canvas id="ChartServices"></canvas>
+            </div>
         </div>
     </div>
-    </div>
+</div>
+</div>
 
 <script>
     // chart bar 1
