@@ -117,7 +117,7 @@ COPY . .
 
 Далее нам нужен новый файл docker-compose.yml. Он говорит Docker, как запустить наши Docker-контейнеры.
 
-(app) $ touch docker-compose.yml
+3) sudo nano docker-compose.yml
 
 version: '3.7'
 services:
